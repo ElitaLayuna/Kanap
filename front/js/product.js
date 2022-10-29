@@ -107,9 +107,7 @@ addToCartBtn.addEventListener("click", (event)=>{
     //Gets the form values
     let productOptions = {
         id: productId,
-        name: document.getElementById('title').innerHTML,
         color: colorSelect.value,
-        img: document.querySelector('.item__img'),
         quantity: Number(quantityChoice.value)
     }
 console.log(productOptions);
