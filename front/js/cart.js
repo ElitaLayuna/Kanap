@@ -2,7 +2,7 @@
 let productInLocalStorage = JSON.parse(localStorage.getItem("Kanap"));
 
 //Declaring 2 variables and affecting them value
-let quantityNumber = 0;
+let totalQuantity = 0;
 let totalPrice = 0;
 
 
@@ -16,40 +16,39 @@ if (productInLocalStorage == null) {
     for (let index = 0; index < productInLocalStorage.length; index++) {
         const product = productInLocalStorage[index];
 
-        //Getting the product's infos from the API
-        fetch('http://localhost:3000/api/products/'+ product.id)
+        //Getting the product"s infos from the API
+        fetch("http://localhost:3000/api/products/"+ product.id)
             .then((response) => {
             return response.json()
             })
 
             .then(data => {
-                console.log(data)
                 
                 //CREATING ELEMENTS OF THE DOM
 
                 //Get an HTML element by ID - items section 
                 let cartItems = document.getElementById("cart__items");
 
-                    //Creates HTML article element and affects each product's link
+                    //Creates HTML article element and affects each product"s link
                     let sectionArticle = document.createElement("article");
                     cartItems.appendChild(sectionArticle);
                     sectionArticle.className = "cart__item";
                     sectionArticle.id = product.id;
                     sectionArticle.color = product.color;
                     
-                        //Creates a div in 'article'vthat will contain img
+                        //Creates a div in "article"vthat will contain img
                         let imgDiv = document.createElement("div");
                         sectionArticle.appendChild(imgDiv);
                         imgDiv.className = "cart__item__img";
 
-                            //Creates img element's in the imgDiv
+                            //Creates img element"s in the imgDiv
                             let productImg = document.createElement("img");
                             imgDiv.appendChild(productImg);
                             productImg.src = data.imageUrl;
                             productImg.alt = data.altTxt;
 
 
-                        //Creates a div in 'article'that will contain description/quantity/delete
+                        //Creates a div in "article"that will contain description/quantity/delete
                         let productDiv = document.createElement("div");
                         sectionArticle.appendChild(productDiv);
                         productDiv.className = "cart__item__content";
@@ -83,7 +82,7 @@ if (productInLocalStorage == null) {
                                 settingsDiv.appendChild(inSettingsDiv);
                                 inSettingsDiv.className = "cart__item__content__settings__quantity";
 
-                                    //Creates a 'p' in the div contained in settingsDiv
+                                    //Creates a "p" in the div contained in settingsDiv
                                     let productQuantity = document.createElement("p");
                                     inSettingsDiv.appendChild(productQuantity);
                                     productQuantity.innerText = "Qté";
@@ -104,36 +103,39 @@ if (productInLocalStorage == null) {
                             productDiv.appendChild(deleteDiv);
                             deleteDiv.className = "cart__item__content__settings__delete";
 
-                                //Creates a 'p' in the deleteDiv
+                                //Creates a "p" in the deleteDiv
                                 let deleteButton = document.createElement("p");
                                 deleteDiv.appendChild(deleteButton);
                                 deleteButton.innerText = "Supprimer";
                                 deleteButton.className = "deleteItem";
 
-                
-
-
-                                                          
+                                
                 //TOTAL
 
                 //Variables to change string into number
-                
-                quantityNumber = quantityNumber + parseInt(product.quantity);
+                totalQuantity = totalQuantity + parseInt(product.quantity);
                 totalPrice = totalPrice + parseInt(data.price * product.quantity);
 
                 //Additioning the products prices
-                document.querySelector("#totalQuantity").innerHTML = quantityNumber;
+                document.querySelector("#totalQuantity").innerHTML = totalQuantity;
                 document.querySelector("#totalPrice").innerHTML = totalPrice;
   
+
+
                 //DELETE
-            let deleteButton = document.querySelector(".deleteItem");
-            console.log(deleteButton);
-            deleteButton.addEventListener("click", (event)=>{
-                event.preventDefault();
-        
-            //Delets the item from the local storage
-            window.localStorage.removeItem('Kanap');
-        })
+                deleteButton.addEventListener("click", (event)=>{
+                    deleteButton.closest(".cart__item").remove();
+                    localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+                })
+
+
+
+                //QUANTITY CHANGE
+                quantityInput.addEventListener("change", (event) => {
+                    product.quantity = event.target.value;
+                    localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+                    location.reload();
+                })
 
         })
         
@@ -141,23 +143,4 @@ if (productInLocalStorage == null) {
         .catch((error) => {
             console.error(error)
         })
-        }
-
-        
-
-}
-
-
-
-
-
-
-//-----Function permettant la suppréssion d'un item du panier
-function toEmptyCart() {
-
-    // Lorsque qu'on clique sur le bouton, le panier se vide ainsi que le localStorage
-    const buttonToEmptyCart = document.querySelector(".deleteItem");
-    buttonToEmptyCart.addEventListener("click", () => {
-        
-    });
-}
+}}
