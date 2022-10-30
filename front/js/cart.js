@@ -122,14 +122,6 @@ if (productInLocalStorage == null) {
   
 
 
-                //DELETE
-                deleteButton.addEventListener("click", (event)=>{
-                    deleteButton.closest(".cart__item").remove();
-                    localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
-                })
-
-
-
                 //QUANTITY CHANGE
                 quantityInput.addEventListener("change", (event) => {
                     product.quantity = event.target.value;
@@ -144,3 +136,50 @@ if (productInLocalStorage == null) {
             console.error(error)
         })
 }}
+
+window.onload = function() {
+    let buttons = document.querySelectorAll(".deleteItem");
+    console.log(buttons);
+    for (let button of buttons){
+        button.addEventListener("click", event => {
+            let kanapId = event.target.getAttribute("canapeId");
+            let kanapColor = event.target.getAttribute("canapeColor");
+            const searchDeletedItem = product.find(element => element.id == kanapId && element.couleur == kanapColor);
+            productInLocalStorage = product.filter(item => item != searchDeletedItem);
+            localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+            window.location.href = "cart.html";
+        })
+    }
+  };
+
+
+
+//FORM VALIDITY
+
+//Puts HTML elements in variable
+let form = document.querySelector(".cart__order__form")
+let formFirstName = document.getElementById("firstName");
+let formLastName = document.getElementById("lastName");
+let formAddress = document.getElementById("address");
+let formCity = document.getElementById("city");
+let submitButton = document.querySelector("#order");
+
+formFirstName.setAttribute("pattern", "[a-zA-Z-éèà]");
+
+/*
+submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    let validName = formFirstName.checkValidity();
+    if(!validName) {
+        message(formFirstName);
+
+    }
+})
+
+function message(formFirstName) {
+    if(formFirstName.validity.valueMissing){
+        formFirstName.setCustomValidity("Ce champ est obligatoire")
+    }
+    formFirstName.reportValidity();
+}
+*/
