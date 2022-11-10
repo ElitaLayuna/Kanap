@@ -1,7 +1,7 @@
 
 //Get the articles from the API
 function getArticles() {
-    fetch('http://localhost:3000/api/products')
+     fetch('http://localhost:3000/api/products')
     .then((response) => {
     return response.json()
   })
