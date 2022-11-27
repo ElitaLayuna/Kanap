@@ -46,29 +46,36 @@ function getProduct() {
 })
 }
 
-//Calls the function
-getProduct()
+getProduct();
 
 //--------------------Local Storage--------------------//
 
-let message = document.querySelector('.item__content__addButton');
+
 
 //Creats the function storing in local storage
 function saveInLocalStorage(productOptions) {
 
     //Gets items from LS and converts strings to Js object
     let productInLocalStorage = JSON.parse(localStorage.getItem("Kanap"));
+    //Selects DOM element to leave message when needed
+    let message = document.querySelector('.item__content__addButton');
 
     //If the product isn't in the cart, add the product with his options
     if (productInLocalStorage === null) {
         productInLocalStorage= [];
-        productInLocalStorage.push(productOptions);
 
-        //converts Js objects to strings
-        localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+        if (productOptions.quantity > 100 || productOptions.quantity < 1) {
+            alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
+            location.reload();  
 
-        //leaves a message when you add a product to the cart
-        message.innerHTML = "Produit ajouté au panier!";
+        } else {
+            productInLocalStorage.push(productOptions);
+            //converts Js objects to strings
+            localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+            //leaves a message when you add a product to the cart
+            message.innerHTML = "Produit ajouté au panier!";
+        }
+        
 
     } else {
         //Constant 'found' searches for a product in the cart this same id and color
@@ -76,44 +83,65 @@ function saveInLocalStorage(productOptions) {
         
         //If product with same id and color not found, add it
         if (found == undefined) {
-            productInLocalStorage.push(productOptions);
-            localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
-            message.innerHTML = "Produit ajouté au panier!";
+            
+            if (productOptions.quantity > 100 || productOptions.quantity < 1) {
+            alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
+            location.reload();  
+            
+            } else {
+                productInLocalStorage.push(productOptions);
+                //converts Js objects to strings
+                localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+                //leaves a message when you add a product to the cart
+                message.innerHTML = "Produit ajouté au panier!";
+            }
 
     //If product with same id and color, just add quantity
     } else {
-        found.quantity += productOptions.quantity;
-        localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
-        message.innerHTML = "Produit ajouté au panier. Attention ce produit figure déja dans votre panier"
+
+        if (productOptions.quantity > 100 || productOptions.quantity < 1) {
+            alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
+            location.reload();  
+            
+        } else {
+            //update quantity
+            found.quantity += productOptions.quantity;
+            //converts Js objects to strings
+            localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
+            //leaves a message when you add a product to the cart
+            message.innerHTML = "Produit ajouté au panier. Attention ce produit figure déja dans votre panier";
+        }
     }
 }
 }
+
 
 //----------------------Cart----------------------//
 
 //Getting the data of the products selected by the user
+function getSelectedData () {
+    //Selects the html color selector
+    const colorSelect = document.querySelector('#colors');
+    //Selects the number input
+    const quantityChoice = document.querySelector('#quantity');
+    //Selects the 'add to cart' button
+    const addToCartBtn = document.querySelector('#addToCart');
 
-//Selects the html color selector
-const colorSelect = document.querySelector('#colors');
-//Selects the number input
-const quantityChoice = document.querySelector('#quantity');
-//Selects the 'add to cart' button
-const addToCartBtn = document.querySelector('#addToCart');
+    //Listen to button and send the cart
+    addToCartBtn.addEventListener("click", (event)=>{
+        event.preventDefault();
 
-//Listen to button and send the cart
-addToCartBtn.addEventListener("click", (event)=>{
-    event.preventDefault();
+        //Gets the form values
+        let productOptions = {
+            id: productId,
+            color: colorSelect.value,
+            quantity: Number(quantityChoice.value)
+        }
+    console.log(productOptions);
+        saveInLocalStorage(productOptions);
+    })
+}
 
-    //Gets the form values
-    let productOptions = {
-        id: productId,
-        color: colorSelect.value,
-        quantity: Number(quantityChoice.value)
-    }
-console.log(productOptions);
-    saveInLocalStorage(productOptions);
-})
-
-
+getSelectedData ();
 
 
