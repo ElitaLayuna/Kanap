@@ -205,7 +205,7 @@ const ville = document.getElementById("city");
 const adresse = document.getElementById("address");
 const mail = document.getElementById("email");
 
-//Regexs
+//REGEXS
 const regexName = /^^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/;
 
 // first name
@@ -253,11 +253,11 @@ ville.addEventListener ("change", (e) => {
 
 const emailErrorMsg = document.getElementById("emailErrorMsg");
 function validateEmail(mail) {
-    const regexMail = /^[a-zA-Z0-9.-_]{1,50}[@]{1}[a-zA-Z]{1,50}[.]{1}[a-z]{2,10}$/;
+    const regexMail = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     if (regexMail.test(mail.value) == false) {
         emailErrorMsg.innerHTML = "Entrez un email valide avant de passer commande.";
     } else {
-        emailErrorMsg.innerHTML = "valide";
+        emailErrorMsg.innerHTML = null;
         return true;
     }
 }
@@ -283,13 +283,10 @@ function contactAndProductData() {
     let products = [];
   
     for (i = 0; i < items.length; i++) {
-        if (products.find((e) => e == items[i][0])) {
-          console.log("not found");
-        } else {
-          products.push(items[i][0]);
-        }
+          products.push(items[i].id);
+        
       }
-
+      console.log("product id", products);
     let jsonData = JSON.stringify({ contact, products });
     return jsonData;
   }
