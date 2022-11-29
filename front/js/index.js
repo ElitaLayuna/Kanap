@@ -1,5 +1,5 @@
 
-//Get the articles from the API
+//Gets the articles from the API with fetch
 function getArticles() {
      fetch('http://localhost:3000/api/products')
     .then((response) => {

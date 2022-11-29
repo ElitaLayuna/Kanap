@@ -1,10 +1,10 @@
-//Get each product's ID
+//Gets each product's ID within the URL
 const getProductId = (new URL(document.location)).searchParams;
 let productId = getProductId.get('id');
 
 //--------------------Product--------------------//
 
-//Get the wanted article from the API
+//Gets the wanted article from the API
 function getProduct() {
     fetch('http://localhost:3000/api/products/'+ productId)
     .then((response) => {
@@ -52,7 +52,7 @@ getProduct();
 
 
 
-//Creats the function storing in local storage
+//Creats the function storing product in local storage when needed
 function saveInLocalStorage(productOptions) {
 
     //Gets items from LS and converts strings to Js object
@@ -137,7 +137,6 @@ function getSelectedData () {
             color: colorSelect.value,
             quantity: Number(quantityChoice.value)
         }
-    console.log(productOptions);
         saveInLocalStorage(productOptions);
     })
 }

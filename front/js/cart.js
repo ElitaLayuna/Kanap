@@ -6,7 +6,7 @@ let totalPrice = 0;
 let product;
 let productInLocalStorage = JSON.parse(localStorage.getItem("Kanap"));
 
-//Function that gets elements from the LS
+//Function that gets elements from the local storage
 function getElements() {
 
     //If nothing in cart, shows message
@@ -15,10 +15,9 @@ function getElements() {
 
     //Else, has to display products of the local storage
     } else {
-
+        //Loop to get each product of the cart
         for (let index = 0; index < productInLocalStorage.length; index++) {
             product = productInLocalStorage[index];
-            console.log(product);
             displayElements(product);
         }
     }
@@ -33,10 +32,10 @@ async function fetchItems (product) {
     return data;
 }
 
-
+//Function that displays the products that the promise returned
 function displayElements (product) {
     fetchItems(product).then(data => {
-        console.log(data);
+
         //CREATING ELEMENTS OF THE DOM
         //Get an HTML element by ID - items section 
         let cartItems = document.getElementById("cart__items");
@@ -115,11 +114,11 @@ function displayElements (product) {
                     productDiv.appendChild(deleteDiv);
                     deleteDiv.className = "cart__item__content__settings__delete";
 
-                        //Creates a "p" in the deleteDiv
-                        let deleteButton = document.createElement("p");
-                        deleteDiv.appendChild(deleteButton);
-                        deleteButton.innerText = "Supprimer";
-                        deleteButton.className = "deleteItem";
+                    //Creates a "p" in the deleteDiv
+                    let deleteButton = document.createElement("p");
+                    deleteDiv.appendChild(deleteButton);
+                    deleteButton.innerText = "Supprimer";
+                    deleteButton.className = "deleteItem";
 
                         
         //TOTAL
@@ -134,15 +133,16 @@ function displayElements (product) {
 
     })
 
-
+    //Error in case the request failes
     .catch(error => {
-        console.error(error) //items request failed
+        console.error(error) 
     });
 
 }
 
 
 //QUANTITY CHANGE
+//Function to change quantity and update the change in the local storage
 function quantityUpdate () {
     
     let quantityInput = document.querySelectorAll(".itemQuantity");
@@ -150,12 +150,15 @@ function quantityUpdate () {
     for (let index = 0; index < quantityInput.length; index++) {
         quantityInput[index].addEventListener("change", (event) => {
             let product = productInLocalStorage[index];
+
             //La quantité choisit est stockée dans la quantité du produit du local storage
             product.quantity = event.target.value;
+
             //Si la quantitée n'est pas entre 0 et 100, une alerte apparait, sinon le quantité du produit est mise à jour dans le local storage
             if (event.target.value > 100 || event.target.value < 1) {
                 alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0, si vous souhaitez supprimer le produit, appuyer sur 'Supprimer'");
-                location.reload();  
+                location.reload(); 
+            //sinon la quantité est mise à jour dans le local storage
             } else {
                 localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
                 location.reload();
@@ -165,25 +168,26 @@ function quantityUpdate () {
     }
 }
 
-//Timeout to lunch the function after the promise response
+//Timeout to lunch the quantity update function after the promise response
 setTimeout(quantityUpdate, 2000);
 
 
 
 //DELETE ITEM
+//Function to delete items from the cart
 function deleteItemFromCart () {
 
     let deleteButtons = document.querySelectorAll(".deleteItem");
+    //loop to get all the "delete" buttons and add an event listener on each
     for (let index = 0; index < deleteButtons.length; index++) {
         deleteButtons[index].addEventListener("click", (event) => {
         let targetArticle = productInLocalStorage[index];
-        console.log("test" +targetArticle);
+        //puts products'id and color in variable to then use to find them in the local storage and delete if wanted
         let kanapId = targetArticle.id;
         let kanapColor = targetArticle.color;
-        console.log("id" +kanapId);
-        console.log("color" +kanapColor);
+        //filter that keeps only the products without the same id and color as the deleted product
         productInLocalStorage = productInLocalStorage.filter(element => element.id !== kanapId && element.couleur !== kanapColor);
-        console.log(productInLocalStorage);
+        //update the change within the local storage
         localStorage.setItem("Kanap", JSON.stringify(productInLocalStorage));
         window.location.href = "cart.html";
     })
@@ -208,7 +212,8 @@ const mail = document.getElementById("email");
 //REGEXS
 const regexName = /^^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/;
 
-// first name
+//Function to see if the first name fulfills the regex conditions
+//if not, displays an error message, else doesn't
 const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
 function validateFirstName(prenom) {
   if (regexName.test(prenom.value) == false) {
@@ -218,11 +223,12 @@ function validateFirstName(prenom) {
     return true;
   }
 }
+//Event listener to verify regex condition on change
 prenom.addEventListener ("change", (e) => {
     validateFirstName(prenom);
 })
 
-// last name
+//Function to see if the last name fulfills the regex conditions
 const lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
 function validateLastName(nom) {
   if (regexName.test(nom.value) == false) {
@@ -232,12 +238,13 @@ function validateLastName(nom) {
     return true;
   }
 }
+//Event listener to verify regex condition on change
 nom.addEventListener ("change", (e) => {
     validateLastName(nom);
 })
 
 
-// city
+//Function to see if the city name fulfills the regex conditions 
 const cityErrorMsg = document.getElementById("cityErrorMsg");
 function validateCity(ville) {
   if (regexName.test(ville.value) == false) {
@@ -247,10 +254,12 @@ function validateCity(ville) {
     return true;
   }
 }
+//Event listener to verify regex condition on change
 ville.addEventListener ("change", (e) => {
     validateCity(ville);
 })
 
+//Function to see if email fulfills the regex conditions
 const emailErrorMsg = document.getElementById("emailErrorMsg");
 function validateEmail(mail) {
     const regexMail = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
@@ -261,6 +270,8 @@ function validateEmail(mail) {
         return true;
     }
 }
+//Event listener to verify regex condition on change
+
 mail.addEventListener ("change", (e) => {
     validateEmail(mail);
 })
@@ -269,6 +280,7 @@ mail.addEventListener ("change", (e) => {
 //PURCHASE
 // 'Post' request
 
+//Function that gets contact and product data and changes them into strings
 //Contact objet with form values + array of products'ids in the cart
 function contactAndProductData() {
     let contact = {
@@ -286,14 +298,16 @@ function contactAndProductData() {
           products.push(items[i].id);
         
       }
-      console.log("product id", products);
     let jsonData = JSON.stringify({ contact, products });
     return jsonData;
-  }
+}
 
+contactAndProductData();
 
-//EventListener on order button
+//Function to send the data to the back end if it passes the regexs validations
+function sendToBackEnd() {
 let orderButton = document.getElementById("order");
+//EventListener on order button
 orderButton.addEventListener("click", (e) => {
   e.preventDefault();
   //to prevent fetch to post without REGEXs permission :
@@ -306,32 +320,31 @@ orderButton.addEventListener("click", (e) => {
     alert("Remplissez correctement le formulaire");
   }
   else {
+
+    //fetch to get the order number
     fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    headers: {
-      "Content-Type": 'application/json;charset=utf-8',
-    },
-    body: contactAndProductData()
-  })
+        method: "POST",
+        headers: {
+        "Content-Type": 'application/json;charset=utf-8',
+        },
+        body: contactAndProductData()
+    })
 
     .then((response) => response.json())
 
     .then((data) => {
-        
         //clearing localStorage after info has been posted
         localStorage.clear();
-        console.log("test" + data.orderId);
+        //sends user to confirmation page with it's order number
         window.location.href = "./confirmation.html?id=" + data.orderId;
     })
+
     //alert if error
     .catch((error) => {
-        alert(error);
-        /*alert("Une erreur est survenue, merci de réessayer ultérieurement. Contactez nous si le probleme persiste");*/
+        alert("Une erreur est survenue, merci de réessayer ultérieurement. Contactez nous si le probleme persiste");
     });
 }
 });
+}
 
-
-  //Fetch to post 
-
-
+sendToBackEnd();
