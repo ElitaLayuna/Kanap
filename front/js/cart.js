@@ -1,4 +1,4 @@
-//Declaring 2 variables and affecting them value
+//Declaring variables and affecting them value
 let totalQuantity = 0;
 let totalPrice = 0;
 
@@ -34,6 +34,7 @@ async function fetchItems (product) {
 
 //Function that displays the products that the promise returned
 function displayElements (product) {
+    
     fetchItems(product).then(data => {
 
         //CREATING ELEMENTS OF THE DOM
@@ -217,7 +218,7 @@ const regexName = /^^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/;
 const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
 function validateFirstName(prenom) {
   if (regexName.test(prenom.value) == false) {
-    firstNameErrorMsg.innerHTML = "Entrez un prénom valide et sans chiffre avant de passer commande.";
+    firstNameErrorMsg.innerHTML = "Entrez un prénom valide (sans chiffre ou symboles)";
 } else {
     firstNameErrorMsg.innerHTML = null;
     return true;
@@ -232,7 +233,7 @@ prenom.addEventListener ("change", (e) => {
 const lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
 function validateLastName(nom) {
   if (regexName.test(nom.value) == false) {
-    lastNameErrorMsg.innerHTML = "Entrez un nom valide et sans chiffre avant de passer commande.";
+    lastNameErrorMsg.innerHTML = "Entrez un nom valide (sans chiffre ou symboles)";
 } else {
     lastNameErrorMsg.innerHTML = null;
     return true;
@@ -248,7 +249,7 @@ nom.addEventListener ("change", (e) => {
 const cityErrorMsg = document.getElementById("cityErrorMsg");
 function validateCity(ville) {
   if (regexName.test(ville.value) == false) {
-    cityErrorMsg.innerHTML = "Entrez un nom de ville valide et sans chiffre avant de passer commande.";
+    cityErrorMsg.innerHTML = "Entrez un nom de ville valide (sans chiffre ou symboles)";
 } else {
     cityErrorMsg.innerHTML = null;
     return true;
@@ -264,7 +265,7 @@ const emailErrorMsg = document.getElementById("emailErrorMsg");
 function validateEmail(mail) {
     const regexMail = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     if (regexMail.test(mail.value) == false) {
-        emailErrorMsg.innerHTML = "Entrez un email valide avant de passer commande.";
+        emailErrorMsg.innerHTML = "Entrez une adresse email valide avant de passer commande.";
     } else {
         emailErrorMsg.innerHTML = null;
         return true;
@@ -310,12 +311,17 @@ let orderButton = document.getElementById("order");
 //EventListener on order button
 orderButton.addEventListener("click", (e) => {
   e.preventDefault();
-  //to prevent fetch to post without REGEXs permission :
+  //to prevent fetch to post without REGEXs permission
   if (
     !mail.value ||
     !prenom.value ||
     !nom.value ||
-    !ville.value
+    !ville.value ||
+    !adresse.value||
+    regexName.test(prenom.value) == false||
+    regexName.test(nom.value) == false||
+    regexName.test(ville.value) == false||
+    regexMail.test(mail.value) == false
   ) {
     alert("Remplissez correctement le formulaire");
   }

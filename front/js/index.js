@@ -5,8 +5,8 @@ function getArticles() {
     .then((response) => {
     return response.json()
   })
-  .then(data => {
-    for (let article of data) {
+    .then(data => {
+      for (let article of data) {
 
         //Get an HTML element by ID - items section 
         let items = document.getElementById("items");

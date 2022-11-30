@@ -10,7 +10,7 @@ function getProduct() {
     .then((response) => {
     return response.json()
   })
-  .then(data => {
+    .then(data => {
         //Creates an img inside an existing div
         let imgSection = document.querySelector('.item__img');
         let productImg = document.createElement('img');
@@ -59,6 +59,8 @@ function saveInLocalStorage(productOptions) {
     let productInLocalStorage = JSON.parse(localStorage.getItem("Kanap"));
     //Selects DOM element to leave message when needed
     let message = document.querySelector('.item__content__addButton');
+    const colorSelect = document.querySelector('#colors');
+    
 
     //If the product isn't in the cart, add the product with his options
     if (productInLocalStorage === null) {
@@ -66,8 +68,9 @@ function saveInLocalStorage(productOptions) {
 
         if (productOptions.quantity > 100 || productOptions.quantity < 1) {
             alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
-            location.reload();  
-
+            location.reload();
+        } else if (!colorSelect.value) {
+            alert ("Veuillez choisir une couleur")
         } else {
             productInLocalStorage.push(productOptions);
             //converts Js objects to strings
@@ -83,11 +86,12 @@ function saveInLocalStorage(productOptions) {
         
         //If product with same id and color not found, add it
         if (found == undefined) {
-            
+    
             if (productOptions.quantity > 100 || productOptions.quantity < 1) {
             alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
-            location.reload();  
-            
+            location.reload();
+            } else if (!colorSelect.value) {
+                alert ("Veuillez choisir une couleur")  
             } else {
                 productInLocalStorage.push(productOptions);
                 //converts Js objects to strings
@@ -98,11 +102,13 @@ function saveInLocalStorage(productOptions) {
 
     //If product with same id and color, just add quantity
     } else {
-
-        if (productOptions.quantity > 100 || productOptions.quantity < 1) {
+        if (productOptions.quantity > 100 || productOptions.quantity < 1 ) {
             alert ("La quantité du produit ne doit pas dépasser 100 et ne peut pas être inférieure à 0");
-            location.reload();  
-            
+            location.reload();
+        } else if (!colorSelect.value) {
+            alert ("Veuillez choisir une couleur")
+        } else if (found.quantity + productOptions.quantity > 100) {
+            alert ("Ce produit figure déja dans votre panier. Assurez vous que la quantité totale ne soit pas supérieure à 100");
         } else {
             //update quantity
             found.quantity += productOptions.quantity;
@@ -114,7 +120,6 @@ function saveInLocalStorage(productOptions) {
     }
 }
 }
-
 
 //----------------------Cart----------------------//
 

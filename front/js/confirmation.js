@@ -1,3 +1,12 @@
+//Function that displays order confirmation and order number
+function orderConfirmation() {
+    const id = (new URL(document.location)).searchParams.get("id");
+document.getElementById("orderId").innerHTML = id;
+}
+
+orderConfirmation();
+
+
 //Function that creats a div where a thanks message will be displays
 function clientThanks() {
     const confirmationP = document.querySelector(".confirmation p");
@@ -8,11 +17,3 @@ function clientThanks() {
 }
 
 clientThanks();
-
-//Function that displays order confirmation and order number
-function orderConfirmation() {
-    const id = (new URL(document.location)).searchParams.get("id");
-document.getElementById("orderId").innerHTML = id;
-}
-
-orderConfirmation();
